@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart House Price Estimator</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:30px;
+background:linear-gradient(135deg,#0b1120,#111827,#1e1b4b,#0f172a);
+background-size:400% 400%;
+animation:bgmove 10s ease infinite;
+}
+
+@keyframes bgmove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.container{
+width:950px;
+padding:35px;
+border-radius:28px;
+background:rgba(255,255,255,0.07);
+backdrop-filter:blur(14px);
+box-shadow:0 0 35px rgba(0,255,255,0.15);
+color:white;
+}
+
+h1{
+text-align:center;
+font-size:48px;
+margin-bottom:8px;
+background:linear-gradient(90deg,#ffffff,#60a5fa,#a855f7);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.sub{
+text-align:center;
+font-size:18px;
+opacity:0.8;
+margin-bottom:28px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:25px;
+}
+
+.card{
+padding:25px;
+border-radius:22px;
+background:rgba(255,255,255,0.05);
+border:1px solid rgba(255,255,255,0.08);
+}
+
+.card h2{
+margin-bottom:18px;
+font-size:28px;
+color:#c084fc;
+}
+
+.form-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+}
+
+input,select{
+width:100%;
+padding:14px;
+border-radius:14px;
+border:1px solid rgba(255,255,255,0.08);
+outline:none;
+background:#0f172a;
+color:white;
+font-size:15px;
+}
+
+button{
+width:100%;
+margin-top:18px;
+padding:16px;
+border:none;
+border-radius:16px;
+font-size:20px;
+font-weight:bold;
+cursor:pointer;
+background:linear-gradient(90deg,#3b82f6,#9333ea,#d946ef);
+color:white;
+transition:0.3s;
+}
+
+button:hover{
+transform:translateY(-2px);
+box-shadow:0 0 20px rgba(168,85,247,0.5);
+}
+
+.result-box{
+padding:20px;
+border-radius:18px;
+margin-bottom:16px;
+text-align:center;
+background:rgba(34,197,94,0.12);
+border:1px solid rgba(34,197,94,0.4);
+}
+
+.result-box h3{
+font-size:22px;
+margin-bottom:10px;
+}
+
+.price{
+font-size:44px;
+font-weight:bold;
+color:#22c55e;
+}
+
+.emi{
+font-size:30px;
+font-weight:bold;
+color:#fbbf24;
+}
+
+.small{
+font-size:15px;
+opacity:0.75;
+}
+
+.bottom{
+margin-top:28px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:25px;
+}
+
+.list li{
+list-style:none;
+padding:10px 0;
+border-bottom:1px solid rgba(255,255,255,0.08);
+}
+
+.stats{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-top:12px;
+}
+
+.stat{
+padding:18px;
+border-radius:16px;
+text-align:center;
+background:rgba(255,255,255,0.05);
+}
+
+.green{border:1px solid #22c55e;}
+.blue{border:1px solid #3b82f6;}
+.purple{border:1px solid #a855f7;}
+.orange{border:1px solid #f59e0b;}
+
+.num{
+font-size:28px;
+font-weight:bold;
+margin-top:6px;
+}
+
+.footer{
+margin-top:25px;
+text-align:center;
+font-size:14px;
+opacity:0.7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🏠 Smart House Price Estimator</h1>
+<div class="sub">Advanced Rule-Based Price Prediction System</div>
+
+<div class="grid">
+
+<div class="card">
+<h2>🏛 Enter Property Details</h2>
+
+<form method="POST">
+
+<div class="form-grid">
+
+<input type="number" name="area" placeholder="Area (sq ft)" required>
+<input type="number" name="bedrooms" placeholder="Bedrooms" required>
+
+<input type="number" name="bathrooms" placeholder="Bathrooms" required>
+<input type="number" name="age" placeholder="Age of House" required>
+
+<select name="location">
+<option value="Prime">Prime Location</option>
+<option value="Standard">Standard Location</option>
+<option value="Basic">Basic Location</option>
+</select>
+
+<select name="parking">
+<option value="Yes">Parking Available</option>
+<option value="No">No Parking</option>
+</select>
+
+</div>
+
+<button type="submit">🚀 Predict Price</button>
+
+</form>
+
+</div>
+
+<div class="card">
+<h2>📊 Estimation Result</h2>
+
+<div class="result-box">
+<h3>Estimated Price</h3>
+<div class="price">₹ {{ estimated_price if estimated_price else 0 }}</div>
+<div class="small">{{ category if category else "--" }}</div>
+</div>
+
+<div class="result-box" style="background:rgba(245,158,11,0.10);border:1px solid rgba(245,158,11,0.35);">
+<h3>Monthly EMI</h3>
+<div class="emi">₹ {{ emi if emi else 0 }}</div>
+<div class="small">20 Years @ 8.5%</div>
+</div>
+
+<div class="result-box" style="background:rgba(168,85,247,0.10);border:1px solid rgba(168,85,247,0.35);">
+<h3>Average Price</h3>
+<div class="emi">₹ {{ avg_price if avg_price else 0 }}</div>
+<div class="small">Overall Average</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="bottom">
+
+<div class="card">
+<h2>🕒 Recent Predictions</h2>
+<ul class="list">
+{% for item in history %}
+<li>{{ item }}</li>
+{% endfor %}
+</ul>
+</div>
+
+<div class="card">
+<h2>📈 Dashboard Overview</h2>
+
+<div class="stats">
+
+<div class="stat green">
+Budget
+<div class="num">{{ budget }}</div>
+</div>
+
+<div class="stat blue">
+Standard
+<div class="num">{{ standard }}</div>
+</div>
+
+<div class="stat purple">
+Premium
+<div class="num">{{ premium }}</div>
+</div>
+
+<div class="stat orange">
+Total
+<div class="num">{{ budget + standard + premium }}</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="footer">Premium Real Estate Estimation Web App</div>
+
+</div>
+
+</body>
+</html>
